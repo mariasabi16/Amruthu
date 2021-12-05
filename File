@@ -1,0 +1,723 @@
+/*
+
+HackS'US Project 
+Group name - Techwiz
+Group Members - Maria Sabi, Joel Manuel CJ, Kristin Elizabeth Binu, Hitha Mathew P
+Our sustainable goal- Eradication of poverty and hunger
+" AMRUTHU " is a program that works as medium for both donating and receiving food, thereby reducing hunger and starvation. It also helps in reducing the food wastage and hence aims at a sustainable future. 
+The donors like event managers, hotels, non-profit organizations or even individuals, from a certain locality can easily access the platform and contibute their donations via few simple steps. The needy with an Aadhar card, which is required for identity proof, can find food in their locality from suitable donors.
+The delivery and pickup will be conducted by NGO workers, non-profit organizations and other volunteers. 
+
+*/
+#include<fstream>
+#include<iostream>
+#include<iomanip>
+#include<string.h>
+#include<conio.h>
+#include<stdio.h>
+#include<windows.h>
+#include<time.h>
+using namespace std;
+
+void gotoxy(int x, int y) 
+{ 
+    COORD coord;
+    coord.X = x; 
+    coord.Y = y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+char bo=219;
+void border()
+{system("cls");
+char c=219;
+int i;
+gotoxy(1,1);
+for(i=1;i<=80;i++)
+	{
+		cout<<c;
+	}//top
+gotoxy(70,1);
+for(i=1;i<=23;i++)
+	{
+		cout<<c<<'\n';
+	}//left
+for(i=1;i<=80;i++)
+{
+cout<<c;
+} //bottom
+gotoxy(80,1);
+for(i=1;i<24;i++)
+	{
+		gotoxy(80,i);
+		cout<<c;
+	}//right
+}
+void front()
+{
+border();
+gotoxy(35,12);
+cout<<"Amruthu";
+gotoxy(10,20);
+cout<<"Made by:Techwiz";
+}
+class food
+{private:
+char donor_name[40];
+char receiver_name[40];
+int num_available;
+char pickup_point[30];
+char delivery_point[30];
+char food_name[30];
+char delivery_status[20];
+public:
+char* return_donor();
+char* return_receiver();
+char* return_pickup();
+char* return_delivery();
+char* return_food();
+char* return_deliverystatus();
+int return_num();
+int get_food(int);
+void input_fooddetails();
+food()
+	{
+		strcpy(delivery_status,"available");
+	}
+}fo1,fo2;
+class Receiver
+{
+int op,i;
+char new_name[50],new_address[100],new_email[30],new_password[20],pass[20];
+private:
+char name[50],address[100],email[30],aadharnum[20],password[20];
+public:
+	char *return_name()
+	{
+		return name;
+	}
+	char * return_address()
+	{
+		return address;
+	}
+	char *return_email()
+	{
+		return email;
+	}
+	char *return_password()
+	{
+		return password;
+	}
+	char *return_aadharno()
+	{
+		return aadharnum;
+	}
+void enter_details() //Entering details of the receiver
+{
+	system("cls");
+	cout<<"Please enter the details of the receiver: \n";
+	cout<<"\nName: ";
+	cin>>name;
+	fflush(stdin);
+	cout<<"\nAddress: ";
+	cin.getline(address,100);
+	fflush(stdin);
+	cout<<"\nAadhar number: ";
+	cin>>aadharnum;
+	cout<<"\nEmail id: ";
+	cin>>email;
+	fflush(stdin);
+	cout<<"\nEnter Password(8 digits all alphabets): ";
+	for(i=0;i<8;i++)
+	{
+	password[i]=getch();
+	cout<<"*";
+	}
+	password[i]='\0';
+	fflush(stdin);
+	cout<<"\nConfirm Password: ";
+	cin>>pass;
+	if(strcmp(pass,password)!=0)
+	cout<<"\nPassword does not match\n";
+	else
+	cout<<"\nPassword confirmed\n";
+	cout<<"\n press any key to continue";
+	getch();
+}
+void change_details() //Changing the current details of the reciever
+{
+	system("cls");
+cout<<"\n*CHANGE YOUR DETAILS*\n";
+cout<<"1. Name\t 2. Address\t 3. Email id\t 4. Password\n";
+cout<<"Enter your option: \n";
+cin>>op;
+switch(op)
+{
+case 1:
+cout<<"Enter the new name: ";
+cin>>new_name;
+strcpy(name,new_name);
+break;
+
+case 2:
+cout<<"Enter the new address: ";
+cin>>new_address;
+strcpy(address,new_address);
+break;
+
+case 3:
+cout<<"Enter the new email id: ";
+cin>>new_email;
+strcpy(email,new_email);
+break;
+
+case 4:
+	cout<<"\nEnter Password(8 digits all alphabets): ";
+	for(i=0;i<8;i++)
+	{
+	password[i]=getch();
+	cout<<"*";
+	}
+	password[i]='\0';
+	fflush(stdin);
+	cout<<"\nConfirm Password: ";
+	for(i=0;i<8;i++)
+	{
+	pass[i]=getch();
+	cout<<"*";
+	}
+	pass[i]='\0';
+	if(strcmp(pass,password)!=0)
+		cout<<"\nPassword does not match\n";
+	else
+		cout<<"\nPassword confirmed\n";
+		break;
+default:
+cout<<"INVALID OPTION!";
+}
+}
+void display_details() //Displaying the details of the receiver
+{
+	system("cls");
+cout<<"DETAILS OF RECEIVER\n";
+cout<<"\nName: "<<name;
+cout<<"\nAddress: "<<address;
+cout<<"\nAadhar number: "<<aadharnum;
+cout<<"\nEmail id: "<<email;
+}
+}r1;
+class Donor
+{
+int op,i;
+char n[30],ad[100],id[25],p[50],pass[50];
+private:
+char name[30], address[100], email[25], password[50];
+public:
+	char *return_name()
+	{
+	return name;
+	}
+	char * return_address()
+	{
+	return address;
+	}
+	char *return_email()
+	{
+	return email;
+	}
+	char *return_password()
+	{
+	return password;
+	}
+void enter_details() //Entering details of the donor
+{
+	system("cls");
+cout<<"\nEnter details of Donor:\n";
+cout<<"\nEnter Name: ";
+cin>>name;
+fflush(stdin);
+cout<<"\nEnter Address: ";
+cin.getline(address,100);
+cout<<"\nEnter email id: ";
+cin.getline(email,25);
+cout<<"\nEnter Password(8 digits all alphabets): ";
+for(i=0;i<8;i++)
+{
+password[i]=getch();
+cout<<"*";
+}
+password[i]='\0';
+fflush(stdin);
+cout<<"\nConfirm Password: ";
+cin>>pass;
+if(strcmp(pass,password)!=0)
+cout<<"\nPassword does not match\n";
+else
+cout<<"\nPassword confirmed\n";
+}
+public:
+void display_details() //Displaying details of the donor
+{
+	system("cls");
+cout<<"\n*** DONOR DETAILS ***\n";
+cout<<"Name: "<<name;
+cout<<"\nAddress: "<<address;
+cout<<"\nEmail id: "<<email;
+}
+public:
+void change_details() //Changing the current details of the donor
+{
+	system("cls");
+cout<<"\n\nSelect the data to be edited:\n 1. Change Name\n 2. Change Address\n 3. Change Email ID\n 4. Change Password\n\n";
+cin>>op;
+switch(op)
+{
+case 1:
+cout<<"\nEnter new Name: ";
+cin>>n;
+strcpy(name,n);
+break;
+case 2:
+cout<<"\nEnter new Address: ";
+cin>>ad;
+strcpy(address,ad);
+break;
+case 3:
+cout<<"\nEnter new Email Id: ";
+cin>>id;
+strcpy(email,id);
+break;
+case 4:
+cout<<"\nEnter Password(8 digits all alphabets): ";
+for(i=0;i<8;i++)
+{
+	password[i]=getch();
+	cout<<"*";
+}
+password[i]='\0';
+fflush(stdin);
+cout<<"\nConfirm Password: ";
+for(i=0;i<8;i++)
+{
+	pass[i]=getch();
+	cout<<"*";
+}
+pass[i]='\0';
+if(strcmp(pass,password)!=0)
+	cout<<"\nPassword does not match\n";
+else
+	cout<<"\nPassword confirmed\n";
+break;
+default:
+cout<<"\nInvalid Choice";
+}
+}
+}d1;
+void food::input_fooddetails() //Inputting details of the food
+{
+	fflush(stdin);
+cout<<"\nEnter food details:-\nEnter food name: ";
+gets(food_name);
+cout<<"\nEnter number available: ";
+cin>>num_available;
+	fflush(stdin);
+cout<<"\nEnter donor name: ";
+gets(donor_name);
+cout<<"\nEnter pickup point: ";
+gets(pickup_point);
+}
+int food::return_num() //Quantity of available food
+{
+return num_available;
+} 
+
+char* food::return_delivery() //Delivery point
+{
+return delivery_point;
+} 
+
+char* food::return_pickup() //Pickup point
+{
+return pickup_point;
+}
+char* food::return_deliverystatus() //Delivery status
+{
+return delivery_status;
+} 
+
+char* food::return_food() //Food name
+{
+return food_name;
+}
+char* food::return_donor() //Donor name
+{
+return donor_name;
+}
+char* food::return_receiver() //Receiver name
+{
+return receiver_name;
+}
+int food::get_food(int no)
+{
+if(num_available>=no)
+{
+cout<<"Food booked!";
+	num_available-=no;
+	srand(time(0));
+return rand();
+}
+else if(num_available==0) //Required food is unavailable
+{
+strcpy(delivery_status,"Unavailable");
+cout<<"Sorry! Food item has run out!";
+return 0;
+}
+else
+cout<<"Request unsuccessful!";
+} 
+
+void display_fooddetails(food f) //Displaying details of the food
+{
+char fn[20],dn[20],pp[20],dp[20],ds[20],rn[20];
+strcpy(fn,f.return_food());
+strcpy(dn,f.return_donor());
+strcpy(rn,f.return_receiver());
+strcpy(pp,f.return_pickup());
+strcpy(dp,f.return_delivery());
+strcpy(ds,f.return_deliverystatus());
+cout<<"\nFood name: "<<fn<<"\nNumber available: "<<f.return_num()<<"\nDonor name: "<<dn<<"\nPickup point: "<<pp<<"\nReceiver name: "<<rn<<"Delivery status: "<<ds;
+}
+void add_food() //Adding new food
+{system("cls");
+border();
+gotoxy(2,2);
+int a=1;
+fstream f1("food.dat",ios::binary|ios::app);
+for(int i=0;i<a;i++)
+{
+	fo1.input_fooddetails();
+	f1.write((char*)&fo1,sizeof(fo1));
+}
+f1.close();
+}
+int accept_food(int n) //Accepting the food
+{system("cls");
+border();
+gotoxy(2,2);
+int a=0,b=0,c,i,l;
+char name[20],d[20],id[20],x[20];
+cout<<"\n"<<bo<<" Enter the name of the food: ";
+cin>>id;
+fstream f1("food.dat",ios::binary|ios::in|ios::out);
+while(f1.read((char*)&fo1,sizeof(fo1)))
+{
+a++;
+strcpy(x,fo1.return_food());
+if(strcmp(x,id)==0)
+{
+b++;
+break;
+}
+}
+if(b==0)
+{
+cout<<"\n FOOD NOT FOUND";
+return 0;
+}
+cout<<"\n Enter the number of food needed: ";
+cin>>l;
+fo1.get_food(l);
+f1.seekp((a-1)*sizeof(r1),ios::beg); 
+
+f1.write((char*)&fo1,sizeof(fo1));
+f1.close();
+c=a;
+fstream f2("delivered.dat",ios::binary|ios::app);
+fstream f3("reciever.dat",ios::binary|ios::in);
+f3.seekp((n-1)*sizeof(r1),ios::beg);
+strcpy(fo1.return_receiver(),r1.return_name());
+f2.write((char*)&fo1,sizeof(fo1));
+f2.close();
+f3.close();
+return c;
+}
+void adddonor() //Signup for the donor(new user)
+{system("cls");
+border();
+gotoxy(2,2);
+int a=1;
+fstream f1("donor.dat",ios::binary|ios::app);
+for(int i=0;i<a;i++)
+{
+d1.enter_details();
+f1.write((char*)&d1,sizeof(d1));
+}
+f1.close();
+}
+int logind() //Login for the donor(existing user)
+{system("cls");
+border();
+gotoxy(2,2);
+int a=0,b=0,c,i;
+char em[20],d[20],id[20],x[20];
+cout<<"\n"<<bo<<" Enter the email id: ";
+cin>>id;
+fstream f1("donor.dat",ios::binary|ios::in|ios::out);
+while(f1.read((char*)&d1,sizeof(d1)))
+{
+a++;
+strcpy(x,d1.return_email());
+if(strcmp(x,id)==0)
+{
+break;
+}
+}
+strcpy(d,d1.return_password());
+if(a!=0)
+{
+cout<<"\n"<<bo<<" Enter the password: ";
+for(i=0;i<strlen(d);i++)
+{
+em[i]=getch();
+cout<<'*';
+}
+em[i]='\0';
+if(strcmp(d,em)==0)
+{
+b=1;
+cout<<"\n"<<bo<<" PASSWORD VERIFICATION SUCCESSFULL\n"<<bo<<" WELCOME!";
+}
+getch();
+}
+else
+{
+cout<<"\n"<<bo<<" WRONG EMAIL ID!";
+return -1;
+}
+c=a;
+if(b==0)
+{
+cout<<"\n"<<bo<<" WRONG PASSWORD!";
+c=0;
+return -1;
+}
+system("cls");
+int m;
+char ans;
+do{
+cout<<"\n***************DONOR MENU**************";
+cout<<"\n*1. Change personal details            *";
+cout<<"\n*2. Display details                    *";
+cout<<"\n*3. Donate a food item                 *";
+cout<<"\n*4. Exit                               *";
+cout<<"\n****************************************";
+cout<<"\n Enter the choice: ";
+cin>>m;
+if(m==1)
+{
+	d1.change_details();
+	f1.seekg((a-1)*sizeof(d1),ios::beg);
+	f1.write((char*)&d1,sizeof(d1));
+}
+else if(m==2)
+	d1.display_details();
+else if(m==3)
+	add_food();
+else if(m==4)
+	return -2;
+else
+	cout<<"\n WRONG CHOICE";
+cout<<"\n Do you want to continue?(y/n) ";
+cin>>ans;
+system("cls");
+}while(ans=='y'||ans=='Y');
+f1.close();
+return c;
+} 
+
+void addreciever() //Signup for the receiver(new user)
+{system("cls");
+border();
+gotoxy(2,2);
+int a=1;
+fstream f1("reciever.dat",ios::binary|ios::app);
+for(int i=0;i<a;i++)
+{
+r1.enter_details();
+f1.write((char*)&r1,sizeof(r1));
+}
+f1.close();
+}
+int loginr() //Login for the receiver(existing user)
+{
+system("cls");
+border();
+gotoxy(2,2);
+int a=0,b=0,c,i;
+char em[20],d[20],id[20],x[20];
+cout<<"\n"<<bo<<" Enter the email id: ";
+cin>>id;
+fstream f1("reciever.dat",ios::binary|ios::in);
+while(f1.read((char*)&r1,sizeof(r1)))
+{
+a++;
+strcpy(x,r1.return_email());
+if(strcmp(x,id)==0)
+{
+break;
+}
+}
+strcpy(d,r1.return_password());
+if(a!=0)
+{
+cout<<"\n"<<bo<<" Enter the password: ";
+for(i=0;i<strlen(d);i++)
+{
+	em[i]=getch();
+	cout<<'*';
+}
+em[i]='\0';
+if(strcmp(d,em)==0)
+{
+b=1;
+cout<<"\n"<<bo<<" PASSWORD VERIFICATION SUCCESSFULL\n"<<bo<<" WELCOME!";
+}
+getch();
+}
+else
+{
+cout<<"\n"<<bo<<" WRONG EMAIL ID!";
+return -1;
+}
+c=a;
+if(b==0)
+{
+cout<<"\n"<<bo<<" WRONG PASSWORD!";
+c=0;
+return -1;
+}
+system("cls");
+int m;
+char ans;
+do{
+cout<<"\n*************RECIEVER MENU**************";
+cout<<"\n*1. Change personal details            *";
+cout<<"\n*2. Display details                    *";
+cout<<"\n*3. Receive a food item                *";
+cout<<"\n*4. Display all food available         *";
+cout<<"\n*5. Exit                               *";
+cout<<"\n****************************************";
+cout<<"\n Enter the choice: ";
+cin>>m;
+if(m==1)
+{
+	r1.change_details();
+	f1.seekg((a-1)*sizeof(r1),ios::beg);
+	f1.write((char*)&r1,sizeof(r1));
+}
+else if(m==2)
+	r1.display_details();
+else if(m==3)
+	accept_food(a);
+else if(m==4)
+{
+	fstream f1("food.dat",ios::binary|ios::in);
+	while(f1.read((char*)&fo1,sizeof(fo1)))
+	{
+	if(fo1.return_num()>0)
+		display_fooddetails(fo1);
+	}
+	f1.close();
+}
+else if(m==5)
+	return -2;
+else
+	cout<<"\n WRONG CHOICE";
+cout<<"\n Do you want to continue?(y/n) ";
+cin>>ans;
+system("cls");
+}while(ans=='y'||ans=='Y');
+f1.close();
+return c;
+}
+int donor() //Menu options for the donor
+{
+	system("cls");
+	int a;
+	char ans;
+	do{
+	cout<<"\n***************DONOR MENU**************";
+	cout<<"\n*1. Signup                            *";
+	cout<<"\n*2. Login                             *";
+	cout<<"\n*3. Exit                              *";
+	cout<<"\n***************************************";
+	cout<<"\n Enter the choice: ";
+	cin>>a;
+	if(a==1)
+		adddonor();
+	else if(a==2)
+		logind();
+	else if(a==3)
+		return 0;
+	else
+		cout<<"\n WRONG CHOICE";
+	cout<<"\n Do you want to continue?(y/n) ";
+	cin>>ans;
+	system("cls");
+	}while(ans=='y'||ans=='Y');
+}
+int receive() //Menu options for the receiver
+{
+	system("cls");
+	int a;
+	char ans;
+	do{
+	cout<<"\n*************Receiver Menu*************";
+	cout<<"\n*1. Signup                            *";
+	cout<<"\n*2. Login                             *";
+	cout<<"\n*3. Exit                              *";
+	cout<<"\n***************************************";
+	cout<<"\n Enter the choice: ";
+	cin>>a;
+	if(a==1)
+		addreciever();
+	else if(a==2)
+		loginr();
+	else if(a==3)
+		return 0;
+	else
+		cout<<"\n WRONG CHOICE";
+	cout<<"\n Do you want to continue?(y/n) ";
+	cin>>ans;
+	system("cls");
+	}while(ans=='y'||ans=='Y');
+}
+int main()
+{
+	system("cls");
+	front();
+	system("cls");
+	int a=1;
+	char ans;
+	do{
+	cout<<"\n***************MAIN MENU****************";
+	cout<<"\n*1. Donor                              *";
+	cout<<"\n*2. Receiver                           *";
+	cout<<"\n*3. Exit                               *";
+	cout<<"\n****************************************";
+	cout<<"\n Enter the choice: ";
+	cin>>a;
+	if(a==1)
+		donor();
+	else if(a==2)
+		receive();
+	else if(a==3)
+		return 0;
+	else 
+		cout<<"\n WRONG CHOICE";
+	cout<<"\n Do you want to continue?(y/n) ";
+	cin>>ans;
+	system("cls");
+	}while(ans=='y'||ans=='Y');
+	getch();
+	return 0;
+}
